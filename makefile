@@ -10,4 +10,4 @@ run: all
 .PHONY: clean
 
 clean:
-	rm -f libhello.sh main
+	rm -f libhello.so main
