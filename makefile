@@ -1,4 +1,6 @@
-all: libhello.so
+all: libhello.so main
+
+main:
 	g++ -o main main.cpp -ldl
 
 libhello.so:
