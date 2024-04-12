@@ -1,29 +1,15 @@
-// main.cpp
-#include <dlfcn.h>
 #include <iostream>
 
-int main() {
-    // Load the shared library
-    void* handle = dlopen("./libhello.so", RTLD_LAZY);
-    if (!handle) {
-        std::cerr << "Cannot load library: " << dlerror() << std::endl;
-        return 1;
-    }
+#include <add.hpp>
+#include <hello.hpp>
+#include <multiply.hpp>
 
-    // Get the function pointer
-    typedef void (*SayHelloFunction)();
-    SayHelloFunction sayHello = (SayHelloFunction)dlsym(handle, "sayHello");
-    if (!sayHello) {
-        std::cerr << "Cannot find function: " << dlerror() << std::endl;
-        dlclose(handle);
-        return 1;
-    }
+int main(int argc, char const *argv[])
+{
+  hello();
+  std::cout << multiply(add(2, 2), add(3, 3)) << std::endl;
 
-    // Call the function
-    sayHello();
+  hi("TEst");
 
-    // Close the library
-    dlclose(handle);
-
-    return 0;
+  return 0;
 }

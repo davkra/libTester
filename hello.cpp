@@ -1,8 +1,11 @@
-// hello.cpp
 #include <iostream>
 
-extern "C" {
-    void sayHello() {
-        std::cout << "Hello, World!" << std::endl;
-    }
+void hello(void)
+{
+  std::cout << "Hello world!" << std::endl;
+}
+
+void hi(std::string str)
+{
+  std::cout << str << std::endl;
 }

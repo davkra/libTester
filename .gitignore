@@ -1,2 +1,7 @@
+.vscode/
+
+*.d
+*.o
+*.so
+
 main
-libhello.so

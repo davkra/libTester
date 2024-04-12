@@ -1,15 +1,25 @@
-all: libhello.so main
+CC = g++
+CFLAGS = -Wall -g -std=c++11
+INC = -I.
 
-main:
-	g++ -o main main.cpp -ldl
+BIN = main
+SRC = $(wildcard *.cpp)
+OBJ = $(patsubst %.cpp, %.o, $(SRC))
+LIB = libTest
 
-libhello.so:
-	g++ -Wall -shared -fPIC -o libhello.so hello.cpp
+all: $(BIN)
 
-run: all
-	./main
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INC) -fPIC -c $<
 
-.PHONY: clean
+$(BIN): $(OBJ)
+	$(CC) $(CFLAGS) -shared -o libTest.so $(OBJ)
+	$(CC) $(CFLAGS) -o $(BIN) $(BIN).o -L. -lTest
+
+.PHONY: clean all
 
 clean:
-	rm -f libhello.so main
+	rm -f $(BIN) *.d *.o *.so
+
+valgrind:
+	valgrind env LD_LIBRARY_PATH=. ./$(BIN)
