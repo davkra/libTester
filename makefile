@@ -1,25 +1,37 @@
 CC = g++
 CFLAGS = -Wall -g -std=c++11
-INC = -I.
 
 BIN = main
-SRC = $(wildcard *.cpp)
-OBJ = $(patsubst %.cpp, %.o, $(SRC))
 LIB = libTest
+
+INC = -Iinc
+LIB_PATH = lib
+OBJ_PATH = obj
+SRC_PATH = src
+
+SRC = $(wildcard $(SRC_PATH)/*.cpp)
+OBJ = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC))
 
 all: $(BIN)
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) $(INC) -fPIC -c $<
+rebuild: clean all
+
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(INC) -fPIC -c -o $@ $<
 
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) -shared -o libTest.so $(OBJ)
-	$(CC) $(CFLAGS) -o $(BIN) $(BIN).o -L. -lTest
+	@mkdir -p $(LIB_PATH)
+	$(CC) $(CFLAGS) -shared -o $(LIB_PATH)/$(LIB).so $(OBJ)
+	$(CC) $(CFLAGS) -o $(BIN) $(OBJ_PATH)/$(BIN).o -L$(LIB_PATH) -lTest
 
 .PHONY: clean all
 
 clean:
-	rm -f $(BIN) *.d *.o *.so
+	rm -rf $(BIN) *.d *.o *.so $(OBJ_PATH)/ $(LIB_PATH)/
 
-valgrind:
-	valgrind env LD_LIBRARY_PATH=. ./$(BIN)
+valgrind: all
+	valgrind env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
+
+run: main
+	@env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
