@@ -9,10 +9,10 @@ LIB_PATH = lib
 OBJ_PATH = obj
 SRC_PATH = src
 
-SRC = $(wildcard $(SRC_PATH)/*.cpp)
+SRC = $(filter-out $(SRC_PATH)/main.cpp, $(wildcard $(SRC_PATH)/*.cpp))
 OBJ = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC))
 
-all: $(BIN)
+all: lib $(BIN)
 
 rebuild: clean all
 
@@ -20,9 +20,14 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INC) -fPIC -c -o $@ $<
 
-$(BIN): $(OBJ)
+lib: $(OBJ)
 	@mkdir -p $(LIB_PATH)
 	$(CC) $(CFLAGS) -shared -o $(LIB_PATH)/$(LIB).so $(OBJ)
+
+$(OBJ_PATH)/$(BIN).o: $(SRC_PATH)/$(BIN).cpp
+	$(CC) $(CFLAGS) $(INC) -fPIC -c -o $@ $<
+
+$(BIN): $(OBJ_PATH)/$(BIN).o
 	$(CC) $(CFLAGS) -o $(BIN) $(OBJ_PATH)/$(BIN).o -L$(LIB_PATH) -lTest
 
 .PHONY: clean all
@@ -33,5 +38,5 @@ clean:
 valgrind: all
 	valgrind env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
 
-run: main
+run: all
 	@env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
