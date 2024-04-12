@@ -12,7 +12,7 @@ SRC_PATH = src
 SRC = $(filter-out $(SRC_PATH)/main.cpp, $(wildcard $(SRC_PATH)/*.cpp))
 OBJ = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC))
 
-all: lib $(BIN)
+all: $(LIB_PATH)/$(LIB).so $(BIN)
 
 rebuild: clean all
 
@@ -20,7 +20,7 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INC) -fPIC -c -o $@ $<
 
-lib: $(OBJ)
+$(LIB_PATH)/$(LIB).so: $(OBJ)
 	@mkdir -p $(LIB_PATH)
 	$(CC) $(CFLAGS) -shared -o $(LIB_PATH)/$(LIB).so $(OBJ)
 
@@ -36,7 +36,7 @@ clean:
 	rm -rf $(BIN) *.d *.o *.so $(OBJ_PATH)/ $(LIB_PATH)/
 
 valgrind: all
-	valgrind env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
+	valgrind --trace-children=yes env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN) --leak-check=full
 
 run: all
 	@env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
