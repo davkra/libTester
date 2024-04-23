@@ -1,42 +1,44 @@
-CC = g++
-CFLAGS = -Wall -g -std=c++11
+CC := g++
+CFLAGS := -Wall -g -std=c++11
 
-BIN = main
-LIB = libTest
+BIN := main
+LIBNAME := Test
 
-INC = -Iinc
-LIB_PATH = lib
-OBJ_PATH = obj
-SRC_PATH = src
+LIB_DIR := lib
+SRC_DIR := src
+OBJ_DIR := obj
 
-SRC = $(filter-out $(SRC_PATH)/main.cpp, $(wildcard $(SRC_PATH)/*.cpp))
-OBJ = $(patsubst $(SRC_PATH)/%.cpp, $(OBJ_PATH)/%.o, $(SRC))
+LIB := $(LIB_DIR)/lib$(LIBNAME).so
 
-all: $(LIB_PATH)/$(LIB).so $(BIN)
+SRC := $(filter-out $(SRC_DIR)/$(BIN).cpp, $(wildcard $(SRC_DIR)/*.cpp))
+OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
+
+all: $(LIB) $(BIN)
+
+$(LIB): $(OBJ)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -shared -o $@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -Iinc -fPIC -c -o $@ $<
+
+$(BIN): $(OBJ_DIR)/$(BIN).o
+	$(CC) $(CFLAGS) -o $@ $< -L$(LIB_DIR) -l$(LIBNAME)
+
+$(OBJ_DIR)/$(BIN).o: $(SRC_DIR)/$(BIN).cpp
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -Iinc -c -o $@ $<
 
 rebuild: clean all
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INC) -fPIC -c -o $@ $<
-
-$(LIB_PATH)/$(LIB).so: $(OBJ)
-	@mkdir -p $(LIB_PATH)
-	$(CC) $(CFLAGS) -shared -o $(LIB_PATH)/$(LIB).so $(OBJ)
-
-$(OBJ_PATH)/$(BIN).o: $(SRC_PATH)/$(BIN).cpp
-	$(CC) $(CFLAGS) $(INC) -fPIC -c -o $@ $<
-
-$(BIN): $(OBJ_PATH)/$(BIN).o
-	$(CC) $(CFLAGS) -o $(BIN) $(OBJ_PATH)/$(BIN).o -L$(LIB_PATH) -lTest
-
-.PHONY: clean all
-
-clean:
-	rm -rf $(BIN) *.d *.o *.so $(OBJ_PATH)/ $(LIB_PATH)/
+run: all
+	@env LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(LIB_DIR) ./$(BIN)
 
 valgrind: all
-	valgrind --trace-children=yes env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN) --leak-check=full
+	valgrind --trace-children=yes env LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(LIB_DIR) ./$(BIN) --leak-check=full
 
-run: all
-	@env LD_LIBRARY_PATH=$(LIB_PATH) ./$(BIN)
+.PHONY: clean
+
+clean:
+	rm -rf *.so *.o $(BIN) $(LIB_DIR)/ $(OBJ_DIR)/
