@@ -3,9 +3,10 @@ public class MyNativeClass {
   public static native void myNativeMethod();
 
   public static native void hello();
-  public static native void hi(String str);
-  public static native int add(int a, int b);
 
+  public static native void hi(String str);
+
+  public static native int add(int a, int b);
 
   // Load the native library
   static {
