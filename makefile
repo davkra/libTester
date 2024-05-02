@@ -13,7 +13,7 @@ LIB := $(LIB_DIR)/lib$(LIBNAME).so
 SRC := $(filter-out $(SRC_DIR)/$(BIN).cpp, $(wildcard $(SRC_DIR)/*.cpp))
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
-all: $(LIB) $(BIN)
+all: $(LIB) $(BIN) JAVA_TESTER
 
 $(LIB): $(OBJ)
 	@mkdir -p $(@D)
@@ -30,6 +30,12 @@ $(OBJ_DIR)/$(BIN).o: $(SRC_DIR)/$(BIN).cpp
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -Iinc -c -o $@ $<
 
+JAVA_TESTER:
+	make -C ./JavaTester
+
+test:
+	make run -C ./JavaTester
+
 rebuild: clean all
 
 run: all
@@ -42,3 +48,4 @@ valgrind: all
 
 clean:
 	rm -rf *.so *.o $(BIN) $(LIB_DIR)/ $(OBJ_DIR)/
+
