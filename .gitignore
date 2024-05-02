@@ -1,7 +1,8 @@
-.vscode/
-
 *.d
 *.o
 *.so
 
 main
+
+MyNativeClass.class
+MyNativeClass.h
