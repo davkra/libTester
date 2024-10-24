@@ -48,4 +48,3 @@ valgrind: all
 
 clean:
 	rm -rf *.so *.o $(BIN) $(LIB_DIR)/ $(OBJ_DIR)/
-
