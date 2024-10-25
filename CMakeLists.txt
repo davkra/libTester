@@ -15,10 +15,10 @@ set(OBJ_DIR obj)
 set(INC_DIR inc)
 
 # Output Binaries and Libraries
-set(BIN main)
+set(BIN Main)
 set(LIBNAME Test)
 
-# Source files (excluding main.cpp)
+# Source files (excluding Main.cpp)
 file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
 list(REMOVE_ITEM SRC_FILES "${SRC_DIR}/${BIN}.cpp")
 

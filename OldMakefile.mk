@@ -1,7 +1,7 @@
 CC := g++
 CFLAGS := -Wall -g -std=c++11
 
-BIN := main
+BIN := Main
 LIBNAME := Test
 
 LIB_DIR := lib
