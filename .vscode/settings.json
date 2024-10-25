@@ -8,5 +8,6 @@
     "Krall",
     "libmy",
     "linux"
-  ]
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic"
 }
