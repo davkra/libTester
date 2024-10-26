@@ -1,4 +1,4 @@
-package at.java.libtester;
+package at.libtester;
 
 public class MyNativeClass {
   // Declare the native method
