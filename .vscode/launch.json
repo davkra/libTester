@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MyNativeClass",
+      "request": "launch",
+      "mainClass": "at.libtester.MyNativeClass",
+      "projectName": "javatester"
+    },
+    {
+      "type": "java",
       "name": "Current File",
       "request": "launch",
       "mainClass": "${file}"
@@ -17,7 +24,7 @@
       "mainClass": "MyNativeClass",
       "projectName": "libTester_d1f890b",
       "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/JavaTester/lib",
+        "LD_LIBRARY_PATH": "${workspaceFolder}/JavaTester/lib"
       }
     }
   ]
