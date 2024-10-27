@@ -11,8 +11,7 @@
     "libtester",
     "linux"
   ],
-  "java.configuration.updateBuildConfiguration": "automatic",
-  "C_Cpp.default.includePath": [
-    "/usr/lib/jvm/java-17-openjdk-amd64/include/*"
-  ]
+  "files.associations": {
+    "random": "cpp"
+  }
 }
