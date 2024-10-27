@@ -4,7 +4,7 @@
       "name": "Linux",
       "includePath": [
         "${workspaceFolder}/**",
-        "/usr/lib/jvm/java-11-openjdk-i386/**"
+        "/usr/lib/jvm/java-17-openjdk-amd64/include/**"
       ],
       "defines": [],
       "cStandard": "c17",
