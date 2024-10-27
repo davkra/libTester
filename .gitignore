@@ -16,4 +16,4 @@ target/
 Main
 
 MyNativeClass.class
-MyNativeClass.h
+at_libtester_MyNativeClass.h
