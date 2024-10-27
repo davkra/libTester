@@ -111,6 +111,16 @@ To find out, if the Shared Library was compiled successfully, the bash `file` co
 file libmyNativeLibrary.so
 ```
 
+In Visual Studio Code the `jni.h` file might not be found on the C/C++ path and must be added manually.
+
+```json
+{
+    "C_Cpp.default.includePath": [
+    "/usr/lib/jvm/java-17-openjdk-amd64/include/*"
+  ]
+}
+```
+
 ## References
 
 - [https://github.com/spbwilson/jni-example](https://github.com/spbwilson/jni-example)
