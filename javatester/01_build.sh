@@ -1,5 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")"
+cd src/main/java
 
 # Build header file
 javac -h . at/libtester/MyNativeClass.java
